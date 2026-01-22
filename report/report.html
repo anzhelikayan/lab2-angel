@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №2 - Вебзастосунок для управління бібліотекою</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .title-page {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 3px solid #2c3e50;
+            margin-bottom: 40px;
+        }
+        
+        .title-page h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .title-page h2 {
+            font-size: 24px;
+            color: #34495e;
+            margin-bottom: 30px;
+        }
+        
+        .title-page .info {
+            margin-top: 40px;
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .screenshot {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .screenshot iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .screenshot p {
+            margin-top: 10px;
+            font-style: italic;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .diagram {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .toc {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+        
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Титульна сторінка -->
+        <div class="title-page">
+            <h1>ЛАБОРАТОРНА РОБОТА №2</h1>
+            <h2>Вебзастосунок для управління бібліотекою з CRUD операціями</h2>
+            <div class="info">
+                <p><strong>Предметна галузь:</strong> Бібліотека</p>
+                <p><strong>Мова програмування:</strong> Java 17</p>
+                <p><strong>Фреймворк:</strong> Spring Boot 3.2.0</p>
+                <p><strong>База даних:</strong> H2 (in-memory)</p>
+                <p><strong>Дата виконання:</strong> 2025</p>
+                <p style="margin-top: 20px;"><strong>Виконала:</strong> Янко Анжеліка, група КП-31</p>
+            </div>
+        </div>
+
+        <!-- Зміст -->
+        <div class="toc">
+            <h2>Зміст</h2>
+            <ul>
+                <li><a href="#task">1. Формулювання обраного завдання</a></li>
+                <li><a href="#git">2. Посилання на Git репозиторій</a></li>
+                <li><a href="#er">3. ER діаграма</a></li>
+                <li><a href="#code">4. Лістинг коду</a></li>
+                <li><a href="#screenshots">5. Скріншоти роботи вебзастосунку</a></li>
+                <li><a href="#conclusion">6. Висновки</a></li>
+            </ul>
+        </div>
+
+        <!-- Формулювання завдання -->
+        <div class="section" id="task">
+            <h1>1. Формулювання обраного завдання</h1>
+            
+            <h2>1.1. Назва предметної галузі</h2>
+            <p><span class="highlight">Бібліотека</span></p>
+            
+            <h2>1.2. Опис</h2>
+            <p>У рамках лабораторної роботи було розроблено вебзастосунок для управління бібліотекою з реалізацією CRUD операцій для книг. Застосунок дозволяє створювати, переглядати, редагувати та видаляти книги, а також пов'язувати їх з читачами.</p>
+            
+            <h2>1.3. Порядок виконання роботи</h2>
+            
+            <h3>1. Обрано варіант з предметною областю</h3>
+            <p>Обрано предметну область <strong>"Бібліотека"</strong> для розробки вебзастосунку з CRUD операціями.</p>
+            
+            <h3>2. Створено Git-репозиторій</h3>
+            <p>Створено Git-репозиторій для роботи над завданням лабораторної роботи. Додано файл <code>.gitignore</code> для виключення непотрібних файлів з репозиторію.</p>
+            
+            <h3>3. Визначено та реалізовано ключові сутності</h3>
+            <p>Визначено та реалізовано дві основні сутності:</p>
+            <ul>
+                <li><strong>Book</strong> (основна сутність) - для неї реалізовані CRUD операції</li>
+                <li><strong>Reader</strong> (допоміжна сутність) - зв'язок один-до-багатьох з Book</li>
+            </ul>
+            <p>Створено базу даних з використанням H2 (in-memory). Автоматично створюються початкові дані: 3 читачі та 3 книги.</p>
+            
+            <h3>4. Реалізовано Repositories</h3>
+            <p>Реалізовано інтерфейси <code>BookRepository</code> та <code>ReaderRepository</code> на основі Spring Data JPA для роботи з базою даних.</p>
+            
+            <h3>5. Реалізовано сервіси</h3>
+            <p>Реалізовано сервісний шар <code>BookService</code>, який містить бізнес-логіку для роботи з книгами та читачами.</p>
+            
+            <h3>6. Реалізовано контролер</h3>
+            <p>Реалізовано контролер <code>BookController</code> для обробки HTTP запитів та маршрутизації.</p>
+            
+            <h3>7. Розроблено веб-сторінки</h3>
+            <p>Розроблено дві веб-сторінки:</p>
+            <ul>
+                <li><strong>Список книг</strong> (<code>/books</code>) - відображає всі книги з кнопками для створення, редагування, видалення та зміни статусу</li>
+                <li><strong>Форма книги</strong> (<code>/books/new</code>, <code>/books/{id}</code>, <code>/books/{id}/edit</code>) - використовується для створення, перегляду та редагування книги з повною інформацією про читача</li>
+            </ul>
+            
+            <h3>8. Сформульовано висновки</h3>
+            <p>Висновки представлені в розділі 6.</p>
+        </div>
+
+        <!-- Git репозиторій -->
+        <div class="section" id="git">
+            <h1>2. Посилання на Git репозиторій</h1>
+            <p><strong>Git репозиторій:</strong> <a href="#" target="_blank">[Додайте посилання на ваш Git репозиторій]</a></p>
+            <p><em>Примітка: Необхідно додати посилання на створений Git репозиторій з кодом проєкту.</em></p>
+        </div>
+
+        <!-- ER діаграма -->
+        <div class="section" id="er">
+            <h1>3. ER діаграма</h1>
+            <div class="diagram">
+                <p><strong>ER діаграма бази даних</strong></p>
+                <p style="margin-top: 20px; color: #7f8c8d;">
+                    [Тут має бути ER діаграма бази даних]
+                </p>
+                <div style="text-align: left; display: inline-block; margin-top: 20px;">
+                    <h3>Сутності:</h3>
+                    <ul>
+                        <li><strong>Book</strong> (основна сутність)
+                            <ul>
+                                <li>id (Long, PK)</li>
+                                <li>title (String, NOT NULL)</li>
+                                <li>author (String, NOT NULL)</li>
+                                <li>isbn (String)</li>
+                                <li>reader_id (Long, FK → Reader.id, NOT NULL)</li>
+                                <li>isAvailable (Boolean, NOT NULL)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Reader</strong> (допоміжна сутність)
+                            <ul>
+                                <li>id (Long, PK)</li>
+                                <li>name (String, NOT NULL)</li>
+                                <li>email (String)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h3>Зв'язки:</h3>
+                    <ul>
+                        <li>Book → Reader: Many-to-One (багато книг на одного читача)</li>
+                        <li>Reader → Book: One-to-Many (один читач має багато книг)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Лістинг коду -->
+        <div class="section" id="code">
+            <h1>4. Лістинг коду</h1>
+            
+            <h2>4.1. Моделі</h2>
+            
+            <h3>Book.java</h3>
+            <div class="code-block">
+                <pre>package ua.edu.kpi.library.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+@Entity
+@Table(name = "books")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Book title cannot be empty")
+    @Size(min = 1, max = 200, message = "Book title must be between 1 and 200 characters")
+    @Column(nullable = false, length = 200)
+    private String title;
+
+    @NotBlank(message = "Author cannot be empty")
+    @Size(min = 2, max = 100, message = "Author name must be between 2 and 100 characters")
+    @Column(nullable = false, length = 100)
+    private String author;
+
+    @Column(length = 50)
+    private String isbn;
+
+    @NotNull(message = "Reader must be selected")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "reader_id", nullable = false)
+    private Reader reader;
+
+    @Column(nullable = false)
+    private Boolean isAvailable = true;
+
+    // Constructors, getters, setters...
+}</pre>
+            </div>
+
+            <h3>Reader.java</h3>
+            <div class="code-block">
+                <pre>package ua.edu.kpi.library.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "readers")
+public class Reader {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Reader name cannot be empty")
+    @Size(min = 2, max = 100, message = "Reader name must be between 2 and 100 characters")
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(length = 200)
+    private String email;
+
+    @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List&lt;Book&gt; books = new ArrayList&lt;&gt;();
+
+    // Constructors, getters, setters...
+}</pre>
+            </div>
+
+            <h2>4.2. Repositories</h2>
+            
+            <h3>BookRepository.java</h3>
+            <div class="code-block">
+                <pre>package ua.edu.kpi.library.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import ua.edu.kpi.library.model.Book;
+import java.util.List;
+
+@Repository
+public interface BookRepository extends JpaRepository&lt;Book, Long&gt; {
+    List&lt;Book&gt; findByTitleContainingIgnoreCase(String title);
+    List&lt;Book&gt; findByAuthorContainingIgnoreCase(String author);
+    List&lt;Book&gt; findByReaderId(Long readerId);
+}</pre>
+            </div>
+
+            <h2>4.3. Service</h2>
+            
+            <h3>BookService.java</h3>
+            <div class="code-block">
+                <pre>package ua.edu.kpi.library.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ua.edu.kpi.library.model.Book;
+import ua.edu.kpi.library.model.Reader;
+import ua.edu.kpi.library.repository.BookRepository;
+import ua.edu.kpi.library.repository.ReaderRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class BookService {
+    private final BookRepository bookRepository;
+    private final ReaderRepository readerRepository;
+
+    @Autowired
+    public BookService(BookRepository bookRepository, ReaderRepository readerRepository) {
+        this.bookRepository = bookRepository;
+        this.readerRepository = readerRepository;
+    }
+
+    public List&lt;Book&gt; findAll() {
+        return bookRepository.findAll();
+    }
+
+    public Optional&lt;Book&gt; findById(Long id) {
+        return bookRepository.findById(id);
+    }
+
+    public Book save(Book book) {
+        return bookRepository.save(book);
+    }
+
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    public List&lt;Reader&gt; findAllReaders() {
+        return readerRepository.findAll();
+    }
+}</pre>
+            </div>
+
+            <h2>4.4. Controller</h2>
+            
+            <h3>BookController.java (основні методи)</h3>
+            <div class="code-block">
+                <pre>package ua.edu.kpi.library.controller;
+
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.edu.kpi.library.model.Book;
+import ua.edu.kpi.library.service.BookService;
+
+@Controller
+@RequestMapping("/books")
+public class BookController {
+    private final BookService bookService;
+
+    @GetMapping
+    public String listBooks(Model model) {
+        model.addAttribute("books", bookService.findAll());
+        return "books/list";
+    }
+
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("book", new Book());
+        model.addAttribute("readers", bookService.findAllReaders());
+        model.addAttribute("isEdit", false);
+        return "books/form";
+    }
+
+    @PostMapping("/new")
+    public String createBook(@Valid @ModelAttribute Book book, 
+                            BindingResult result, 
+                            Model model,
+                            RedirectAttributes redirectAttributes) {
+        // Implementation...
+    }
+
+    @PostMapping("/{id}/toggle-status")
+    public String toggleBookStatus(@PathVariable Long id, 
+                                  RedirectAttributes redirectAttributes) {
+        // Implementation...
+    }
+}</pre>
+            </div>
+
+            <p><em>Примітка: Повні лістинги всіх класів можна знайти в вихідних файлах проєкту.</em></p>
+        </div>
+
+        <!-- Скріншоти -->
+        <div class="section" id="screenshots">
+            <h1>5. Скріншоти роботи вебзастосунку</h1>
+            
+            <h2>5.1. Список книг</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/01_books_list.html"></iframe>
+                <p><strong>Рисунок 1:</strong> Сторінка зі списком книг та кнопками для CRUD операцій</p>
+            </div>
+
+            <h2>5.2. Створення нової книги</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/02_create_book.html"></iframe>
+                <p><strong>Рисунок 2:</strong> Форма для створення нової книги</p>
+            </div>
+
+            <h2>5.3. Перегляд книги</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/03_view_book.html"></iframe>
+                <p><strong>Рисунок 3:</strong> Сторінка перегляду книги з повною інформацією про читача</p>
+            </div>
+
+            <h2>5.4. Редагування книги</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/04_edit_book.html"></iframe>
+                <p><strong>Рисунок 4:</strong> Форма для редагування книги</p>
+            </div>
+
+            <h2>5.5. Зміна статусу книги</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/05_toggle_status.html"></iframe>
+                <p><strong>Рисунок 5:</strong> Зміна статусу книги (Available/Borrowed)</p>
+            </div>
+
+            <h2>5.6. Видалення книги</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/06_delete_book.html"></iframe>
+                <p><strong>Рисунок 6:</strong> Підтвердження видалення книги</p>
+            </div>
+
+            <h2>5.7. Валідація даних</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/07_validation.html"></iframe>
+                <p><strong>Рисунок 7:</strong> Відображення помилок валідації</p>
+            </div>
+
+            <h2>5.8. H2 Console</h2>
+            <div class="screenshot">
+                <iframe src="screenshots/08_h2_console.html"></iframe>
+                <p><strong>Рисунок 8:</strong> H2 Console для перегляду бази даних</p>
+            </div>
+        </div>
+
+        <!-- Висновки -->
+        <div class="section" id="conclusion">
+            <h1>6. Висновки</h1>
+            
+            <p>У рамках виконання лабораторної роботи №2 було розроблено вебзастосунок для управління бібліотекою з реалізацією CRUD операцій за допомогою Spring Boot фреймворку.</p>
+            
+            <h2>Досягнуті результати:</h2>
+            <ul>
+                <li>Реалізовано повний набір CRUD операцій для основної сутності (Book)</li>
+                <li>Створено допоміжну сутність (Reader) зі зв'язком один-до-багатьох</li>
+                <li>Налаштовано базу даних H2 з автоматичною ініціалізацією тестових даних</li>
+                <li>Реалізовано Repository шар на основі Spring Data JPA</li>
+                <li>Створено Service шар для бізнес-логіки</li>
+                <li>Реалізовано Controller для обробки HTTP запитів</li>
+                <li>Розроблено дві веб-сторінки: список книг та форма створення/редагування/перегляду</li>
+                <li>Додано можливість швидкої зміни статусу книги без редагування всієї форми</li>
+                <li>Реалізовано валідацію даних на рівні моделі</li>
+                <li>Додано обробку помилок з коректними повідомленнями для користувача</li>
+            </ul>
+            
+            <h2>Особливості реалізації:</h2>
+            <ul>
+                <li>Використано Spring Boot 3.2.0 для швидкої розробки</li>
+                <li>Spring Data JPA для спрощення роботи з базою даних</li>
+                <li>Thymeleaf як шаблонізатор для веб-сторінок</li>
+                <li>H2 in-memory база даних для простоти розробки</li>
+                <li>Bean Validation для валідації даних</li>
+                <li>Стандартний та зручний інтерфейс користувача</li>
+            </ul>
+            
+            <h2>Можливості для розширення:</h2>
+            <ul>
+                <li>Додати CRUD операції для читачів</li>
+                <li>Реалізувати пошук та фільтрацію книг</li>
+                <li>Додати пагінацію для великих списків</li>
+                <li>Реалізувати систему авторизації та ролей</li>
+                <li>Додати REST API для мобільних застосунків</li>
+                <li>Інтегрувати з PostgreSQL або MySQL для production</li>
+            </ul>
+            
+            <p>Вебзастосунок успішно демонструє застосування сучасних технологій Java для розробки веб-застосунків та готовий до подальшого розвитку.</p>
+        </div>
+
+        <!-- Футер -->
+        <div class="footer">
+            <p>Лабораторна робота №2 - Вебзастосунок для управління бібліотекою</p>
+            <p><strong>Виконала:</strong> Янко Анжеліка, група КП-31</p>
+            <p>2025</p>
+        </div>
+    </div>
+</body>
+</html>
