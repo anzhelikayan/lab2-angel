@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit ? 'Edit Book' : (book.id != null ? 'View Book' : 'Add New Book')}">Book - Library Management</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>Library Management System</h1>
+                <h2 th:text="${isEdit ? 'Edit Book' : (book.id != null ? 'View Book Details' : 'Add New Book')}">Book</h2>
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+        <!-- Form -->
+        <div class="form-container">
+            <form th:action="${isEdit ? '/books/' + book.id + '/edit' : '/books/new'}" 
+                  th:object="${book}" 
+                  method="post" 
+                  class="form">
+                
+                <div class="form-group">
+                    <label for="title">
+                        Book Title 
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" 
+                           id="title" 
+                           th:field="*{title}" 
+                           class="form-control"
+                           placeholder="Enter book title"
+                           th:readonly="${!isEdit && book.id != null}">
+                    <span th:if="${#fields.hasErrors('title')}" 
+                          th:errors="*{title}" 
+                          class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">
+                        Author 
+                        <span class="required">*</span>
+                    </label>
+                    <input type="text" 
+                           id="author" 
+                           th:field="*{author}" 
+                           class="form-control"
+                           placeholder="Enter author name"
+                           th:readonly="${!isEdit && book.id != null}">
+                    <span th:if="${#fields.hasErrors('author')}" 
+                          th:errors="*{author}" 
+                          class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="isbn">ISBN</label>
+                    <input type="text" 
+                           id="isbn" 
+                           th:field="*{isbn}" 
+                           class="form-control"
+                           placeholder="Enter ISBN (optional)"
+                           th:readonly="${!isEdit && book.id != null}">
+                </div>
+
+                <div class="form-group">
+                    <label for="reader">
+                        Reader
+                    </label>
+                    <select id="reader" 
+                            th:field="*{reader}" 
+                            class="form-control"
+                            th:disabled="${!isEdit && book.id != null}">
+                        <option value="">📚 No Reader (Free Access) - Status: Available for Reading</option>
+                        <option th:each="reader : ${readers}" 
+                                th:value="${reader.id}" 
+                                th:text="${'👤 ' + reader.name + ' (' + reader.email + ') - Status: Borrowed'}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('reader')}" 
+                          th:errors="*{reader}" 
+                          class="error-message"></span>
+                    <p style="margin-top: 5px; font-size: 12px; color: #a8a8c8;">
+                        <em>Select a reader if the book is borrowed, or leave "No Reader" for free access</em>
+                    </p>
+                    
+                    <!-- Display full reader information when viewing -->
+                    <div th:if="${book.reader != null && !isEdit && book.id != null}" class="reader-info">
+                        <div class="reader-info-header">
+                            <h3>Reader Information</h3>
+                        </div>
+                        <div class="reader-details">
+                            <div class="detail-item">
+                                <span class="detail-label">ID:</span>
+                                <span class="detail-value" th:text="${book.reader.id}"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Name:</span>
+                                <span class="detail-value" th:text="${book.reader.name}"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value" th:text="${book.reader.email}"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Borrowed Books:</span>
+                                <span class="detail-value badge badge-info" th:text="${book.reader.books.size()}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status info: automatically determined by reader presence -->
+                <div class="form-group" th:if="${book.id != null}">
+                    <label>Status</label>
+                    <div class="reader-info" style="margin-top: 5px;">
+                        <span th:if="${book.reader != null}" class="badge badge-warning">📖 Borrowed (has reader)</span>
+                        <span th:unless="${book.reader != null}" class="badge badge-success">✅ Available for Reading (free access)</span>
+                        <p style="margin-top: 8px; font-size: 12px; color: #a8a8c8;">
+                            <em>Status is automatically set based on whether the book has a reader assigned.</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a th:href="@{/books}" class="btn btn-secondary">Back to List</a>
+                    <button type="submit" 
+                            th:text="${isEdit ? 'Update Book' : 'Create Book'}" 
+                            class="btn btn-primary"
+                            th:disabled="${!isEdit && book.id != null}"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

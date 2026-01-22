@@ -1,0 +1,8 @@
+ua\edu\kpi\library\LibraryWebApplication.class
+ua\edu\kpi\library\repository\BookRepository.class
+ua\edu\kpi\library\service\BookService.class
+ua\edu\kpi\library\controller\BookController.class
+ua\edu\kpi\library\model\Reader.class
+ua\edu\kpi\library\repository\ReaderRepository.class
+ua\edu\kpi\library\model\Book.class
+ua\edu\kpi\library\config\DatabaseInitializer.class
